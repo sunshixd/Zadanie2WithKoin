@@ -1,25 +1,7 @@
-package com.example.zadanie2.Data
+package com.example.zadanie2.Data.Remote.Dto
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-
-class PokemonApi(private val client: HttpClient) {
-
-    suspend fun getPokemonList(limit: Int = 50, offset: Int = 0): List<PokemonDto> {
-        val response: PokemonListResponse = client.get("https://pokeapi.co/api/v2/pokemon?limit=$limit&offset=$offset").body()
-        return response.results
-    }
-
-    suspend fun getPokemonDetail(url: String): PokemonDetailDto {
-        return client.get(url).body()
-    }
-}
 
 @Serializable
 data class PokemonListResponse(

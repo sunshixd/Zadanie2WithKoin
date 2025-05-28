@@ -1,4 +1,4 @@
-package com.example.zadanie2.Presentation
+package com.example.zadanie2.Presentation.Main
 
 import com.example.zadanie2.Domain.Pokemon
 import com.example.zadanie2.Presentation.UiState

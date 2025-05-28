@@ -1,8 +1,9 @@
-package com.example.zadanie2.Presentation
+package com.example.zadanie2.Presentation.Main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.zadanie2.Data.Repository.PokemonRepository
+import com.example.zadanie2.Presentation.MainIntent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest

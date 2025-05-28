@@ -1,9 +1,10 @@
-package com.example.zadanie2.Data
+package com.example.zadanie2.Data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.zadanie2.Data.local.entity.PokemonEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

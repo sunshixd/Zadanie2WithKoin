@@ -1,8 +1,8 @@
 package com.example.zadanie2.Data.Repository
 
-import com.example.zadanie2.Data.PokemonDao
-import com.example.zadanie2.Data.PokemonEntity
-import com.example.zadanie2.Data.PokemonApi
+import com.example.zadanie2.Data.local.dao.PokemonDao
+import com.example.zadanie2.Data.local.entity.PokemonEntity
+import com.example.zadanie2.Data.Remote.Api.PokemonApi
 import com.example.zadanie2.Domain.Pokemon
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -47,8 +47,6 @@ class PokemonRepository(
     }
 
 private fun PokemonEntity.toDomain() = Pokemon(id, name, imageUrl, description)
-
-// DTO класса SpeciesDetail нужно объявить в data.remote пакете
 @kotlinx.serialization.Serializable
 data class SpeciesDetail(
     val flavor_text_entries: List<FlavorTextEntry>

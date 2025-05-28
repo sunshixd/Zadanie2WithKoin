@@ -1,4 +1,4 @@
-package com.example.zadanie2.Presentation
+package com.example.zadanie2.Presentation.Detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +15,7 @@ class DetailViewModel(private val repository: PokemonRepository) : ViewModel() {
 
     fun loadPokemon(id: Int) {
         viewModelScope.launch {
-            _state.value = DetailState(isLoading = true)
+            _state.value = _state.value.copy(isLoading = true)
             try {
                 val pokemons = repository.getPokemons().firstOrNull() ?: emptyList()
                 val p = pokemons.find { it.id == id }

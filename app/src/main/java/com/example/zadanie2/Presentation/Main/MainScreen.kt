@@ -1,4 +1,4 @@
-package com.example.zadanie2.UII
+package com.example.zadanie2.Presentation.Main
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.zadanie2.Domain.Pokemon
 import com.example.zadanie2.Presentation.MainIntent
-import com.example.zadanie2.Presentation.MainState
+import com.example.zadanie2.Presentation.Main.MainState
 import androidx.compose.ui.res.painterResource
 import com.example.zadanie2.R
 
@@ -27,17 +27,17 @@ fun MainScreen(
         OutlinedTextField(
             value = state.searchQuery,
             onValueChange = { onIntent(MainIntent.Search(it)) },
-            label = { Text("Search") },
+            label = { Text("Поисковая строка") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row {
             Button(onClick = { onIntent(MainIntent.Sort(true)) }, modifier = Modifier.weight(1f)) {
-                Text("Sort by Name")
+                Text("Сортировка по имени")
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(onClick = { onIntent(MainIntent.Sort(false)) }, modifier = Modifier.weight(1f)) {
-                Text("Sort by Date (N/A)")
+                Text("Сортировка по дате")
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
