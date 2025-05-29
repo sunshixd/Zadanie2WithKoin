@@ -15,7 +15,15 @@ class MainViewModel(private val repository: PokemonRepository) : ViewModel() {
     val state: StateFlow<MainState> = _state
 
     init {
-        processIntent(MainIntent.LoadPokemons)
+        loadPokemons()
+    }
+
+    fun onSearch(query: String) {
+        processIntent(MainIntent.Search(query))
+    }
+
+    fun onSort(byName: Boolean) {
+        processIntent(MainIntent.Sort(byName))
     }
 
     fun processIntent(intent: MainIntent) {
