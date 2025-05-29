@@ -24,7 +24,7 @@ fun MainScreen(
         OutlinedTextField(
             value = state.searchQuery,
             onValueChange = { contract.onSearch(it) },
-            label = { Text("Search") },
+            label = { Text("Поиск") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -33,14 +33,14 @@ fun MainScreen(
                 onClick = { contract.onSort(true) },
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Sort by name")
+                Text("Сортировка по имени")
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = { contract.onSort(false) },
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Sort by date")
+                Text("Сортировка по дате")
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
