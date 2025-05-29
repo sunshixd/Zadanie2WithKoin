@@ -58,3 +58,4 @@ data class FlavorTextEntry(
 data class Language(
     val name: String
 )
+
