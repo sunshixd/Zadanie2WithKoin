@@ -22,7 +22,7 @@ class ImageRepositoryImpl : ImageRepository {
                 val bitmap = loadImage(context, imageUrl)
                 saveBitmapToGallery(context, bitmap)
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Image saved to gallery", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Изображение сохранено в галерею", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
