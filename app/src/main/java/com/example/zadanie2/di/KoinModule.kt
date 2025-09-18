@@ -2,6 +2,8 @@ package com.example.zadanie2.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.zadanie2.Data.Repository.WorkWithImage.ImageRepository
+import com.example.zadanie2.Data.Repository.WorkWithImage.ImageRepositoryImpl
 import com.example.zadanie2.Data.local.Database.AppDatabase
 import com.example.zadanie2.Data.Remote.Api.PokemonApi
 import com.example.zadanie2.Data.Repository.PokemonRepository
@@ -41,11 +43,13 @@ val appModule = module {
     single { PokemonApi(get()) }
 
     single { PokemonRepository(get(), get(), get()) }
+
+    single<ImageRepository> { ImageRepositoryImpl() }
 }
 
 val viewModelModule = module {
     viewModel { MainViewModel(get()) }
-    viewModel { DetailViewModel(get()) }
+    viewModel { DetailViewModel(get(), get()) }
 }
 
 fun provideKoinModules(context: Context) = listOf(appModule, viewModelModule)

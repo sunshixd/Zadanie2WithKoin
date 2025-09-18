@@ -1,55 +1,68 @@
 package com.example.zadanie2.Presentation.Main
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.zadanie2.Domain.Pokemon
-import com.example.zadanie2.Presentation.MainIntent
-import com.example.zadanie2.Presentation.Main.MainState
 import androidx.compose.ui.res.painterResource
 import com.example.zadanie2.R
+import androidx.compose.foundation.clickable
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen(
-    state: MainState,
-    onIntent: (MainIntent) -> Unit,
-    onItemClick: (Int) -> Unit
+    contract: MainScreenContract
 ) {
+    val viewModel: MainViewModel = koinViewModel()
+    val state = viewModel.state.collectAsState().value
+
     Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
         OutlinedTextField(
             value = state.searchQuery,
-            onValueChange = { onIntent(MainIntent.Search(it)) },
-            label = { Text("Поисковая строка") },
+            onValueChange = { viewModel.onSearch(it) },
+            label = { Text("Поиск") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row {
-            Button(onClick = { onIntent(MainIntent.Sort(true)) }, modifier = Modifier.weight(1f)) {
+            Button(
+                onClick = { viewModel.onSort(true) },
+                modifier = Modifier.weight(1f)
+            ) {
                 Text("Сортировка по имени")
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = { onIntent(MainIntent.Sort(false)) }, modifier = Modifier.weight(1f)) {
+            Button(
+                onClick = { viewModel.onSort(false) },
+                modifier = Modifier.weight(1f)
+            ) {
                 Text("Сортировка по дате")
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
 
-        if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(alignment = Alignment.CenterHorizontally))
-        } else if (state.error != null) {
-            Text(text = "Error: ${state.error}", color = MaterialTheme.colorScheme.error)
-        } else {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+        when {
+            state.isLoading -> CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            state.error != null -> Text(
+                text = "Error: ${state.error}",
+                color = MaterialTheme.colorScheme.error
+            )
+            else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.filteredPokemons) { pokemon ->
-                    PokemonListItem(pokemon = pokemon, onClick = { onItemClick(pokemon.id) })
+                    PokemonListItem(
+                        pokemon = pokemon,
+                        onClick = { contract.onItemClick(pokemon.id) }
+                    )
                 }
             }
         }
@@ -57,7 +70,10 @@ fun MainScreen(
 }
 
 @Composable
-fun PokemonListItem(pokemon: Pokemon, onClick: () -> Unit) {
+private fun PokemonListItem(
+    pokemon: Pokemon,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

@@ -1,41 +1,62 @@
 package com.example.zadanie2.Presentation.Detail
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.Alignment
+import com.example.zadanie2.Domain.Pokemon
 import com.example.zadanie2.R
-import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DetailScreen(
-    state: DetailState,
-    onSaveImage: suspend (String) -> Unit
+    pokemonId: Int,
+    context: Context = LocalContext.current
 ) {
+    val viewModel: DetailViewModel = koinViewModel()
+
+    LaunchedEffect(pokemonId) {
+        viewModel.loadPokemon(pokemonId)
+    }
+
+    val state = viewModel.state.collectAsState().value
     val pokemon = state.pokemon
-    val coroutineScope = rememberCoroutineScope()
 
-    if (state.isLoading) {
-        CircularProgressIndicator(modifier = Modifier.fillMaxSize().wrapContentSize())
-        return
+    when {
+        state.isLoading -> CircularProgressIndicator(
+            modifier = Modifier.fillMaxSize().wrapContentSize()
+        )
+        state.error != null -> Text(
+            text = "Error: ${state.error}",
+            color = MaterialTheme.colorScheme.error
+        )
+        pokemon == null -> Text(text = "No details available")
+        else -> PokemonDetailContent(
+            pokemon = pokemon,
+            onSaveImage = { viewModel.saveImage(context, pokemon.imageUrl) }
+        )
     }
+}
 
-    if (state.error != null) {
-        Text(text = "Error: ${state.error}", color = MaterialTheme.colorScheme.error)
-        return
-    }
-
-    if (pokemon == null) {
-        Text(text = "No details available")
-        return
-    }
-
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+@Composable
+private fun PokemonDetailContent(
+    pokemon: Pokemon,
+    onSaveImage: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         AsyncImage(
             model = pokemon.imageUrl,
             contentDescription = pokemon.name,
@@ -46,19 +67,21 @@ fun DetailScreen(
             placeholder = painterResource(id = R.drawable.placeholder)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = pokemon.name, style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = pokemon.name,
+            style = MaterialTheme.typography.headlineMedium
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = pokemon.description, style = MaterialTheme.typography.bodyMedium)
+        Text(
+            text = pokemon.description,
+            style = MaterialTheme.typography.bodyMedium
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = {
-                coroutineScope.launch {
-                    onSaveImage(pokemon.imageUrl)
-                }
-            },
+            onClick = onSaveImage,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text("Save Image")
+            Text("Сохранить изображение")
         }
     }
 }

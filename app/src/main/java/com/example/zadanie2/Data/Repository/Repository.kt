@@ -2,6 +2,7 @@ package com.example.zadanie2.Data.Repository
 
 import com.example.zadanie2.Data.local.dao.PokemonDao
 import com.example.zadanie2.Data.local.entity.PokemonEntity
+import com.example.zadanie2.Data.local.entity.SpeciesDetail
 import com.example.zadanie2.Data.Remote.Api.PokemonApi
 import com.example.zadanie2.Domain.Pokemon
 import io.ktor.client.*
@@ -47,10 +48,6 @@ class PokemonRepository(
     }
 
 private fun PokemonEntity.toDomain() = Pokemon(id, name, imageUrl, description)
-@kotlinx.serialization.Serializable
-data class SpeciesDetail(
-    val flavor_text_entries: List<FlavorTextEntry>
-)
 
 @kotlinx.serialization.Serializable
 data class FlavorTextEntry(
